@@ -1,6 +1,6 @@
 scriptId = 'com.osman.NFS13.v1'
 scriptTitle='The Need For Speed Most Wanted (2013) Connector'
-scriptDetailsUrl='None'
+scriptDetailsUrl='https://github.com/osman-mian/NFS13_MYO_Plugin'
 
 
 currentYaw=0;
