@@ -1,0 +1,141 @@
+scriptId = 'com.osman.NFS13.v1'
+scriptTitle='The Need For Speed Most Wanted (2013) Connector'
+scriptDetailsUrl='None'
+
+
+currentYaw=0;
+currentPitch=0;
+
+defaultYaw=0;
+defaultPitch=0;
+
+Pitchdeadzone=0.2;
+Yawdeadzone=0.2;
+
+ready=false
+c=0;
+
+function onForegroundWindowChange(app, title)
+	if app=="NFS13.exe" then
+		myo.setLockingPolicy("none")
+		myo.debug("Launching")
+		return true;
+	else
+		return false
+	end
+	
+end
+
+function onPeriodic()
+	currentYaw = myo.getYaw()
+	currentPitch= myo.getPitch()
+	
+	setSteer()
+--	Pedal()
+end
+
+function onPoseEdge(pose,edge)
+
+	if ready==false then
+			if pose == "fist" and edge=="on" then
+				ready=true
+				defaultYaw=myo.getYaw()
+				defaultPitch=myo.getPitch()
+				myo.debug("ready")
+			end
+	else
+	
+		
+		if (edge == "on") then	
+
+			if pose == "fingersSpread" then
+				HandBrake()
+			elseif pose == "fist" then
+				Pedal()
+			elseif pose == "waveIn" then
+				defaultYaw=myo.getYaw()
+				defaultPitch=myo.getPitch()
+				myo.debug("Reset")
+			elseif pose == "waveOut" then
+				--not implemented yet
+			end
+		else
+			myo.keyboard("up_arrow","up")
+			myo.keyboard("down_arrow","up")
+			myo.keyboard("space","up")
+			myo.keyboard("left_shift","up")
+			--SteerNuetral()
+		end
+	end
+
+end
+
+
+function nitrousOxide()
+	myo.keyboard("left_shift","down")
+	myo.debug("NitrosOxide")
+end
+
+function setSteer()
+		local delta = currentYaw - defaultYaw;
+		if (delta < -Yawdeadzone)  then 
+			SteerLeft() 
+		elseif (delta > Yawdeadzone)  then 
+			SteerRight() 
+		else 
+			SteerNuetral()
+		end
+end
+
+function SteerNuetral()
+	myo.keyboard("left_arrow","up")
+	myo.keyboard("right_arrow","up")
+	
+	--myo.debug("Steer Nuetral")
+end
+
+function SteerLeft()
+	myo.keyboard("left_arrow","down")
+	myo.keyboard("right_arrow","up")
+	
+	--myo.debug("Steer Left")
+end
+
+function SteerRight()
+	myo.keyboard("left_arrow","up")
+	myo.keyboard("right_arrow","down")
+	
+	--myo.debug("Steer Right")
+end
+
+function Pedal()
+
+		local delta = currentPitch - defaultPitch;
+
+		if (delta < -Pitchdeadzone)  then 
+			Reverse()
+			--myo.debug("Reverse")
+		else
+			Drive()
+		end
+	
+end
+
+function Drive()
+	myo.keyboard("down_arrow","up")
+	myo.keyboard("up_arrow","down")
+end
+
+function Reverse()
+
+	myo.keyboard("down_arrow","down")
+	myo.keyboard("up_arrow","up")
+
+end
+
+
+function HandBrake()
+	myo.keyboard("space","down")
+	myo.debug("Brake")
+end
+
