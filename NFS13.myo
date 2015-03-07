@@ -18,7 +18,7 @@ c=0;
 function onForegroundWindowChange(app, title)
 	if app=="NFS13.exe" then
 		myo.setLockingPolicy("none")
-		myo.debug("Launching")
+		--myo.debug("Launching")
 		return true;
 	else
 		return false
@@ -41,7 +41,7 @@ function onPoseEdge(pose,edge)
 				ready=true
 				defaultYaw=myo.getYaw()
 				defaultPitch=myo.getPitch()
-				myo.debug("ready")
+				--myo.debug("ready")
 			end
 	else
 	
@@ -55,7 +55,7 @@ function onPoseEdge(pose,edge)
 			elseif pose == "waveIn" then
 				defaultYaw=myo.getYaw()
 				defaultPitch=myo.getPitch()
-				myo.debug("Reset")
+				--myo.debug("Reset")
 			elseif pose == "waveOut" then
 				--not implemented yet
 			end
@@ -73,7 +73,7 @@ end
 
 function nitrousOxide()
 	myo.keyboard("left_shift","down")
-	myo.debug("NitrosOxide")
+	--myo.debug("NitrosOxide")
 end
 
 function setSteer()
@@ -91,21 +91,21 @@ function SteerNuetral()
 	myo.keyboard("left_arrow","up")
 	myo.keyboard("right_arrow","up")
 	
-	--myo.debug("Steer Nuetral")
+	----myo.debug("Steer Nuetral")
 end
 
 function SteerLeft()
 	myo.keyboard("left_arrow","down")
 	myo.keyboard("right_arrow","up")
 	
-	--myo.debug("Steer Left")
+	----myo.debug("Steer Left")
 end
 
 function SteerRight()
 	myo.keyboard("left_arrow","up")
 	myo.keyboard("right_arrow","down")
 	
-	--myo.debug("Steer Right")
+	----myo.debug("Steer Right")
 end
 
 function Pedal()
@@ -114,7 +114,7 @@ function Pedal()
 
 		if (delta < -Pitchdeadzone)  then 
 			Reverse()
-			--myo.debug("Reverse")
+			----myo.debug("Reverse")
 		else
 			Drive()
 		end
@@ -136,6 +136,6 @@ end
 
 function HandBrake()
 	myo.keyboard("space","down")
-	myo.debug("Brake")
+	--myo.debug("Brake")
 end
 
