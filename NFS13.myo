@@ -18,7 +18,6 @@ c=0;
 function onForegroundWindowChange(app, title)
 	if app=="NFS13.exe" then
 		myo.setLockingPolicy("none")
-		--myo.debug("Launching")
 		return true;
 	else
 		return false
@@ -26,12 +25,23 @@ function onForegroundWindowChange(app, title)
 	
 end
 
+
+function conditionallySwapWave(pose)
+    if myo.getArm() == "left" then
+        if pose == "waveIn" then
+            pose = "waveOut"
+        elseif pose == "waveOut" then
+            pose = "waveIn"
+        end
+    end
+    return pose
+end
+
 function onPeriodic()
 	currentYaw = myo.getYaw()
 	currentPitch= myo.getPitch()
 	
 	setSteer()
---	Pedal()
 end
 
 function onPoseEdge(pose,edge)
@@ -41,39 +51,40 @@ function onPoseEdge(pose,edge)
 				ready=true
 				defaultYaw=myo.getYaw()
 				defaultPitch=myo.getPitch()
-				--myo.debug("ready")
+				 
 			end
 	else
-	
-		
 		if (edge == "on") then	
-
-			if pose == "fingersSpread" then
-				HandBrake()
-			elseif pose == "fist" then
-				Pedal()
-			elseif pose == "waveIn" then
-				defaultYaw=myo.getYaw()
-				defaultPitch=myo.getPitch()
-				--myo.debug("Reset")
-			elseif pose == "waveOut" then
-				--not implemented yet
-			end
+					pose = conditionallySwapWave(pose)
+					--myo.notifyUserAction()
+					if pose == "fingersSpread" then
+						HandBrake()
+					elseif pose == "fist" then
+						Pedal()
+					elseif pose == "waveIn" then
+						defaultYaw=myo.getYaw()
+						defaultPitch=myo.getPitch()
+					elseif pose == "waveOut" then
+						nitrousOxide()
+					end
 		else
-			myo.keyboard("up_arrow","up")
-			myo.keyboard("down_arrow","up")
-			myo.keyboard("space","up")
-			myo.keyboard("left_shift","up")
-			--SteerNuetral()
+				clearAll()
 		end
 	end
 
 end
 
+function clearAll()
+	myo.keyboard("up_arrow","up")
+	myo.keyboard("down_arrow","up")
+	myo.keyboard("space","up")
+	myo.keyboard("left_shift","up")
+	myo.keyboard("escape","up")
+end
 
 function nitrousOxide()
 	myo.keyboard("left_shift","down")
-	--myo.debug("NitrosOxide")
+	 
 end
 
 function setSteer()
@@ -91,21 +102,21 @@ function SteerNuetral()
 	myo.keyboard("left_arrow","up")
 	myo.keyboard("right_arrow","up")
 	
-	----myo.debug("Steer Nuetral")
+	-- 
 end
 
 function SteerLeft()
 	myo.keyboard("left_arrow","down")
 	myo.keyboard("right_arrow","up")
 	
-	----myo.debug("Steer Left")
+	-- 
 end
 
 function SteerRight()
 	myo.keyboard("left_arrow","up")
 	myo.keyboard("right_arrow","down")
 	
-	----myo.debug("Steer Right")
+	-- 
 end
 
 function Pedal()
@@ -114,7 +125,7 @@ function Pedal()
 
 		if (delta < -Pitchdeadzone)  then 
 			Reverse()
-			----myo.debug("Reverse")
+			-- 
 		else
 			Drive()
 		end
@@ -133,9 +144,11 @@ function Reverse()
 
 end
 
-
 function HandBrake()
 	myo.keyboard("space","down")
-	--myo.debug("Brake")
+	 
 end
 
+function activeAppName()
+    return "NFS13"
+end
